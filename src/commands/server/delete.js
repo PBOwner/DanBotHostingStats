@@ -62,6 +62,12 @@ exports.run = async (client, message, args) => {
             return;
         }
 
+        // Checking if any servers are suspended.
+        if (serversToDelete.some(server => server.attributes.suspended)) {
+            DeleteMessage.edit("Unable to delete server(s) at this time.");
+            return;
+        }
+
         // Construct server names inside the try block
         const serverNames = serversToDelete
             .map((server) => server.attributes.name.split("@").join("@​"))
