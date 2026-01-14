@@ -20,12 +20,15 @@ exports.run = async (client, message, args) => {
     // The user does not have a panel account linked and would like to link one.
     if (await userData.get(message.author.id) != null) {
 
+        const user = await userData.get(message.author.id);
+
         const AlreadyLinkedEmbed = new Discord.EmbedBuilder()
         .setColor(`Green`)
         .addFields(
             { name: `**__Username__**`, value: await userData.get(message.author.id + ".username") },
-            { name: `**__Linked Date (YYYY-MM-DD)__**`, value: await userData.get(message.author.id + ".linkDate") },
-            { name: `**__Linked Time__**`, value: await userData.get(message.author.id + ".linkTime") },
+            { name: `**__Linked Date (YYYY-MM-DD)__**`, value: user.linkDate },
+            { name: `**__Linked Time__**`, value: user.linkTime },
+            { name: `**__Relative Time__**`, value: "<t:" + Math.round(user.epochTime) + ":f> (" + "<t:" + Math.round(user.epochTime) + ":R>)" },
         )
         .setTimestamp()
         .setFooter({text: client.user.username, iconUrl: client.user.avatarURL()});

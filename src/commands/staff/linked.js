@@ -43,6 +43,7 @@ exports.run = async (client, message, args) => {
                     { name: "__**Console ID**__", value: userAccount.consoleID.toString(), inline: false },
                     { name: "__**Date (YYYY/MM/DD)**__", value: userAccount.linkDate.toString(), inline: false },
                     { name: "__**Time**__", value: userAccount.linkTime.toString(), inline: false },
+                    { name: "__**Relative Time**__", value: "<t:" + Math.round(userAccount.epochTime) + ":f> (" + "<t:" + Math.round(userAccount.epochTime) + ":R>)", inline: false },
                 )
                 .setTimestamp()
                 .setFooter({ text: client.user.displayName, iconURL: client.user.avatarURL() });
