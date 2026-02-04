@@ -7,27 +7,36 @@
 Free Hosting forever!                                            /____/
 */
 
-; (async () => {
+;(async () => {
     const fs = require("fs");
-    const Database = require("./src/util/Database.js");
+    const { QuickDB, MySQLDriver } = require("quick.db");
     const Discord = require("discord.js");
     const Sentry = require("@sentry/node");
     //const { nodeProfilingIntegration } = require("@sentry/profiling-node");
-
+ 
 
     const Config = require("./config.json");
 
     //Starting MySQL Database, and global tables.
-    // Removed Quick.db driver initialization
+    const mysqlDriver = new MySQLDriver({
+        host: Config.database.host,
+        port: Config.database.port,
+        user: Config.database.user,
+        password: Config.database.pass,
+        database: Config.database.db,
+    });
+
+    await mysqlDriver.connect();
+    const db = new QuickDB({ driver: mysqlDriver });
 
     global.moment = require("moment");
-    global.userData = new Database("userData"); //User data, Email, ConsoleID, Link time, Username, DiscordID
-    global.nodeStatus = new Database("nodeStatus"); //Node status. Online or offline nodes
-    global.userPrem = new Database("userPrem"); //Premium user data, Donated, Boosted, Total
-    global.codes = new Database("redeemCodes"); //Premium server redeem codes...
-    global.nodePing = new Database("nodePing"); //Node ping response time
-    // global.nodeStatus = new Database("nodeStatus"); // Duplicate removed
-    global.nodeServers = new Database("nodeServers"); //Counts of servers on each Node.
+    global.userData = db.table("userData"); //User data, Email, ConsoleID, Link time, Username, DiscordID
+    global.nodeStatus = db.table("nodeStatus"); //Node status. Online or offline nodes
+    global.userPrem = db.table("userPrem"); //Premium user data, Donated, Boosted, Total
+    global.codes = db.table("redeemCodes"); //Premium server redeem codes...
+    global.nodePing = db.table("nodePing"); //Node ping response time
+    global.nodeStatus = db.table("nodeStatus"); //Status of the Node.
+    global.nodeServers = db.table("nodeServers"); //Counts of servers on each Node.
 
     //Sentry.io Error Tracking.
     await Sentry.init({
