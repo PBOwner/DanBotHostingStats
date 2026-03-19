@@ -54,6 +54,10 @@ exports.run = async (client, message, args) => {
                     check: (msg) => msg.trim().split(" ").length == 1,
                     errorMessage: "Username must not contain any spaces.",
                 },
+                {
+                    check: (msg) => msg.trim().length <= 100,
+                    errorMessage: "Username must not exceed 100 characters.",
+                },
             ],
             time: 30000, // how much time a user has to answer the question before it times out
             value: null, // The user's response.
