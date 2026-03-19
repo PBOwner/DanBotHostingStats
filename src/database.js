@@ -420,6 +420,40 @@ async function setNodeStatusFields(nodeKey, fields) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Returns all node_key values from nodeStatus.
+ */
+async function getAllNodeStatusKeys() {
+    const [rows] = await pool.execute("SELECT node_key FROM nodeStatus");
+    return rows.map(r => r.node_key);
+}
+
+/**
+ * Deletes nodeStatus rows whose node_key is in the given array.
+ */
+async function deleteNodeStatusByKeys(keys) {
+    if (!keys.length) return;
+    const placeholders = keys.map(() => "?").join(", ");
+    await pool.execute(`DELETE FROM nodeStatus WHERE node_key IN (${placeholders})`, keys);
+}
+
+/**
+ * Returns all node_key values from nodeServers.
+ */
+async function getAllNodeServersKeys() {
+    const [rows] = await pool.execute("SELECT node_key FROM nodeServers");
+    return rows.map(r => r.node_key);
+}
+
+/**
+ * Deletes nodeServers rows whose node_key is in the given array.
+ */
+async function deleteNodeServersByKeys(keys) {
+    if (!keys.length) return;
+    const placeholders = keys.map(() => "?").join(", ");
+    await pool.execute(`DELETE FROM nodeServers WHERE node_key IN (${placeholders})`, keys);
+}
+
+/**
  * Returns { node_key, servers, max_count } or null.
  * Replaces: nodeServers.get(nodeKey)
  */
@@ -480,8 +514,12 @@ module.exports = {
     // nodeStatus
     getNodeStatus,
     setNodeStatusFields,
+    getAllNodeStatusKeys,
+    deleteNodeStatusByKeys,
 
     // nodeServers
     getNodeServers,
     setNodeServers,
+    getAllNodeServersKeys,
+    deleteNodeServersByKeys,
 };

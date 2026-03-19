@@ -15,7 +15,7 @@ const Config = require("../config.json");
 
 const BACKUP_DIR = path.join(__dirname, "../backups");
 
-const TARGET_TABLES = ["userData", "userPrem", "redeemCodes", "nodeStatus", "nodeServers", "nodePing"];
+const TARGET_TABLES = ["userData", "userPrem", "redeemCodes", "nodeStatus", "nodeServers"];
 
 function isKVFormat(columns) {
     const names = new Set(columns.map((c) => c.Field));

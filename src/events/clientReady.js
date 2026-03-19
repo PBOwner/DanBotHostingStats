@@ -58,6 +58,7 @@ module.exports = async (client) => {
         console.log(Chalk.magenta("[NODE CHECKER] ") + Chalk.greenBright("Enabled"));
 
         await ServerStatus.startNodeChecker(); //Start the Node Checker.
+        ServerStatus.startCleanupTask(); //Cleanup stale DB entries on startup and every 24h.
 
         // Node Status Embed.
         const channel = client.channels.cache.get(MiscConfigs.nodestatus);

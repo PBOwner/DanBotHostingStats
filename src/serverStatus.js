@@ -1,6 +1,7 @@
 const axios = require('axios');
 const ping = require('ping-tcp-js');
 const Discord = require('discord.js');
+const Chalk = require('chalk');
 const Config = require('../config.json');
 const Status = require('../config/status-configs.js');
 const db = require('./database.js');
@@ -150,4 +151,44 @@ const getEmbed = async () => {
     return embed;
 };
 
-module.exports = { startNodeChecker, parseStatus, getEmbed };
+const cleanupStaleNodes = async () => {
+    const activeStatusKeys = new Set();
+    const activeServersKeys = new Set();
+
+    for (const [, nodes] of Object.entries(Status.Nodes)) {
+        for (const node of Object.keys(nodes)) {
+            activeStatusKeys.add(node.toLowerCase());
+            activeServersKeys.add(node.toLowerCase());
+        }
+    }
+
+    for (const [category, services] of Object.entries(Status)) {
+        if (category !== "Nodes") {
+            for (const name of Object.keys(services)) {
+                activeStatusKeys.add(name.toLowerCase());
+            }
+        }
+    }
+
+    const [allStatusKeys, allServersKeys] = await Promise.all([
+        db.getAllNodeStatusKeys(),
+        db.getAllNodeServersKeys(),
+    ]);
+
+    const staleStatusKeys = allStatusKeys.filter(k => !activeStatusKeys.has(k));
+    const staleServersKeys = allServersKeys.filter(k => !activeServersKeys.has(k));
+
+    await Promise.all([
+        db.deleteNodeStatusByKeys(staleStatusKeys),
+        db.deleteNodeServersByKeys(staleServersKeys),
+    ]);
+
+    console.log(Chalk.magenta("[DATABASE CLEANUP] ") + Chalk.greenBright(`Removed ${staleStatusKeys.length} stale nodeStatus and ${staleServersKeys.length} stale nodeServers entries.`));
+};
+
+const startCleanupTask = () => {
+    cleanupStaleNodes();
+    setInterval(cleanupStaleNodes, 24 * 60 * 60 * 1000);
+};
+
+module.exports = { startNodeChecker, startCleanupTask, parseStatus, getEmbed };

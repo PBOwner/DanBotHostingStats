@@ -107,7 +107,6 @@ ID: "123456789.email"   json: '"user@example.com"'   ← dot-notation fragment (
 | nodeStatus | KV | 32 |
 | nodeServers | KV | 29 |
 | nodeStatus_backup | relational (untouched) | 2,581 |
-| nodePing | relational (unused) | — |
 | json | empty | 0 |
 | nodeData | empty | 0 |
 
