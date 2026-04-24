@@ -52,7 +52,7 @@ const Status = {
                     IP: Config.Nodes.Dono5,
                     ID: "51",
                     Location: Config.Ping.UK,
-                    MaxLimit: 100
+                    MaxLimit: 200
                 }
             },
 
