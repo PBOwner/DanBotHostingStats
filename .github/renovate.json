@@ -3,7 +3,7 @@
   "extends": [
     "config:best-practices",
     ":enableVulnerabilityAlerts",
-    ":dependencyDashboard"
+    ":disableDependencyDashboard"
   ],
   "labels": ["Dependencies"],
   "minimumReleaseAge": "7 days",
