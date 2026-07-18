@@ -1,37 +1,49 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    ":enableVulnerabilityAlerts",
-    ":disableDependencyDashboard"
-  ],
-  "labels": ["Dependencies"],
-  "minimumReleaseAge": "7 days",
-  "minimumReleaseAgeBehaviour": "timestamp-required",
-  "rangeStrategy": "bump",
-  "separateMajorMinor": true,
-  "separateMinorPatch": false,
-  "packageRules": [
-    {
-      "matchPackageNames": ["chalk"],
-      "enabled": false
-    },
-    {
-      "groupName": "all minor and patch dependencies",
-      "groupSlug": "all-minor-patch",
-      "matchUpdateTypes": ["minor", "patch"],
-      "assigneesFromCodeOwners": true,
-      "matchPackageNames": [
-        "*"
-      ]
-    },
-    {
-      "matchUpdateTypes": ["major"],
-      "groupName": null,
-      "assigneesFromCodeOwners": true,
-      "matchPackageNames": [
-        "*"
-      ]
-    }
-  ]
+   "$schema":"https://docs.renovatebot.com/renovate-schema.json",
+   "extends":[
+      "config:best-practices",
+      ":enableVulnerabilityAlerts",
+      ":disableDependencyDashboard"
+   ],
+   "labels":[
+      "Dependencies"
+   ],
+   "ignorePresets":[
+      "security:minimumReleaseAgeNpm"
+   ],
+   "minimumReleaseAge":"7 days",
+   "minimumReleaseAgeBehaviour":"timestamp-required",
+   "rangeStrategy":"bump",
+   "separateMajorMinor":true,
+   "separateMinorPatch":false,
+   "packageRules":[
+      {
+         "matchPackageNames":[
+            "chalk"
+         ],
+         "enabled":false
+      },
+      {
+         "groupName":"all minor and patch dependencies",
+         "groupSlug":"all-minor-patch",
+         "matchUpdateTypes":[
+            "minor",
+            "patch"
+         ],
+         "assigneesFromCodeOwners":true,
+         "matchPackageNames":[
+            "*"
+         ]
+      },
+      {
+         "matchUpdateTypes":[
+            "major"
+         ],
+         "groupName":null,
+         "assigneesFromCodeOwners":true,
+         "matchPackageNames":[
+            "*"
+         ]
+      }
+   ]
 }
